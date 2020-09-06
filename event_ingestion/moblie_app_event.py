@@ -19,4 +19,4 @@ if __name__ == '__main__':
 
         print(data)
         r = requests.post(url=url, data=data)
-        sleep(3)
+        sleep(1)

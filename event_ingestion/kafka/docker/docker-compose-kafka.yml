@@ -71,16 +71,21 @@ services:
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_PLUGIN_PATH: '/usr/share/java'
-    command:
-      - /bin/bash
-      - -c
-      - |
-        # MySQL
-        cd /usr/share/java/kafka-connect-jdbc/
-        curl https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.20/mysql-connector-java-8.0.20.jar --output mysql-connector-java-8.0.20.jar
-        # Now launch Kafka Connect
-        sleep infinity &
-        /etc/confluent/docker/run
+  rest-proxy:
+      image: confluentinc/cp-kafka-rest:5.4.0
+      depends_on:
+        - zookeeper
+        - kafka
+        - schema-registry
+      ports:
+        - 8082:8082
+      hostname: rest-proxy
+      container_name: rest-proxy
+      environment:
+        KAFKA_REST_HOST_NAME: rest-proxy
+        KAFKA_REST_BOOTSTRAP_SERVERS: 'kafka:29092'
+        KAFKA_REST_LISTENERS: "http://0.0.0.0:8082"
+        KAFKA_REST_SCHEMA_REGISTRY_URL: 'http://schema-registry:8081'
   kafdrop:
     image: obsidiandynamics/kafdrop
     restart: "no"

@@ -4,11 +4,11 @@ import boto3
 
 app = Flask(__name__)
 api = Api(app)
+URL = 'http://localhost:8082/topics/test'
 
 
 @app.route('/event', methods=['POST'])
-def form():
-
+def event():
     return '200'
 
 

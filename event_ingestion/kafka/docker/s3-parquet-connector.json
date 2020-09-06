@@ -1,0 +1,27 @@
+{
+  "name" :"s3-parquet-connector",
+  "config":
+  {
+   "connector.class": "io.confluent.connect.s3.S3SinkConnector",
+   "storage.class": "io.confluent.connect.s3.storage.S3Storage",
+   "s3.region": "ap-southeast-1",
+   "s3.bucket.name": "99co-data-lake",
+   "topics.dir": "events",
+   "flush.size": "5",
+   "rotate.schedule.interval.ms": "5000",
+   "auto.register.schemas": "false",
+   "tasks.max": "1",
+   "s3.part.size": "5242880",
+   "timezone": "UTC",
+   "parquet.codec": "snappy",
+   "topics": "events_avro",
+   "schema.registry.url": "http://schema-registry:8081",
+   "s3.credentials.provider.class": "com.amazonaws.auth.DefaultAWSCredentialsProviderChain",
+   "format.class": "io.confluent.connect.s3.format.parquet.ParquetFormat",
+   "value.converter": "io.confluent.connect.avro.AvroConverter",
+   "key.converter": "org.apache.kafka.connect.storage.StringConverter",
+   "partitioner.class": "io.confluent.connect.storage.partitioner.FieldPartitioner",
+   "partition.field.name": "EVENT_TYPE,SERVER_DATE",
+   "value.converter.schema.registry.url": "http://schema-registry:8081"
+  }
+}

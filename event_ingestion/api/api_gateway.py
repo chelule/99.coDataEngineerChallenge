@@ -6,12 +6,11 @@ import json
 
 app = Flask(__name__)
 api = Api(app)
-URL = 'http://localhost:8082/topics/test'
 
 
 @app.route('/event', methods=['POST'])
 def event():
-    url = "http://localhost:8082/topics/test"
+    url = "http://localhost:8082/topics/events"
     headers = {
         "Content-Type": "application/vnd.kafka.json.v1+json"
     }
@@ -20,7 +19,13 @@ def event():
             [
                 {
                     "value": {
-                        "foo": request.form.get('Event_Version')
+                        "Event_Type": request.form.get('Event_Type'),
+                        "Event_Version": request.form.get('Event_Version'),
+                        "User_ID": request.form.get('User_ID'),
+                        "Listing_ID": request.form.get('Listing_ID'),
+                        "Server_Time": request.form.get('Server_Time'),
+                        "Device_Type": request.form.get('Device_Type'),
+
                     }
                 }
             ]

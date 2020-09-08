@@ -1,4 +1,13 @@
 version: '2'
+
+volumes:
+  metadata_data: {}
+  middle_var: {}
+  historical_var: {}
+  broker_var: {}
+  coordinator_var: {}
+  router_var: {}
+
 services:
   zookeeper:
     image: confluentinc/cp-zookeeper:5.4.0
@@ -34,7 +43,7 @@ services:
   schema-registry:
     image: confluentinc/cp-schema-registry:5.4.0
     ports:
-      - 8081:8081
+      - 8085:8081
     depends_on:
       - zookeeper
       - kafka
@@ -49,7 +58,7 @@ services:
       - kafka
       - schema-registry
     ports:
-      - 8083:8083
+      - 8086:8083
     environment:
       CONNECT_LOG4J_APPENDER_STDOUT_LAYOUT_CONVERSIONPATTERN: "[%d] %p %X{connector.context}%m (%c:%L)%n"
       CONNECT_BOOTSTRAP_SERVERS: "kafka:29092"
@@ -71,8 +80,8 @@ services:
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_PLUGIN_PATH: '/usr/share/java'
-      AWS_ACCESS_KEY_ID: ""
-      AWS_SECRET_ACCESS_KEY: ""
+      AWS_ACCESS_KEY_ID: "AKIAJU53DF3LJL6KUSCQ"
+      AWS_SECRET_ACCESS_KEY: "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"
   rest-proxy:
       image: confluentinc/cp-kafka-rest:5.4.0
       depends_on:
@@ -80,7 +89,7 @@ services:
         - kafka
         - schema-registry
       ports:
-        - 8082:8082
+        - 8087:8082
       hostname: rest-proxy
       container_name: rest-proxy
       environment:
@@ -124,3 +133,105 @@ services:
       JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
     depends_on:
       - "kafka"
+
+# added druid here
+
+
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    volumes:
+      - metadata_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=FoolishPassword
+      - POSTGRES_USER=druid
+      - POSTGRES_DB=druid
+
+  # Need 3.5 or later for container nodes
+#  zookeeper:
+#    container_name: zookeeper
+#    image: zookeeper:3.5
+#    environment:
+#      - ZOO_MY_ID=1
+
+  coordinator:
+    image: apache/druid:0.17.0
+    container_name: coordinator
+    volumes:
+      - ./storage:/opt/data
+      - coordinator_var:/opt/druid/var
+    depends_on:
+      - zookeeper
+      - postgres
+    ports:
+      - "8081:8081"
+    command:
+      - coordinator
+    env_file:
+      - environment
+
+  broker:
+    image: apache/druid:0.17.0
+    container_name: broker
+    volumes:
+      - broker_var:/opt/druid/var
+    depends_on:
+      - zookeeper
+      - postgres
+      - coordinator
+    ports:
+      - "8082:8082"
+    command:
+      - broker
+    env_file:
+      - environment
+
+  historical:
+    image: apache/druid:0.17.0
+    container_name: historical
+    volumes:
+      - ./storage:/opt/data
+      - historical_var:/opt/druid/var
+    depends_on:
+      - zookeeper
+      - postgres
+      - coordinator
+    ports:
+      - "8083:8083"
+    command:
+      - historical
+    env_file:
+      - environment
+
+  middlemanager:
+    image: apache/druid:0.17.0
+    container_name: middlemanager
+    volumes:
+      - ./storage:/opt/data
+      - middle_var:/opt/druid/var
+    depends_on:
+      - zookeeper
+      - postgres
+      - coordinator
+    ports:
+      - "8091:8091"
+    command:
+      - middleManager
+    env_file:
+      - environment
+
+  router:
+    image: apache/druid:0.17.0
+    container_name: router
+    volumes:
+      - router_var:/opt/druid/var
+    depends_on:
+      - zookeeper
+      - postgres
+      - coordinator
+    ports:
+      - "8888:8888"
+    command:
+      - router
+    env_file:
+      - environment

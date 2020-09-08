@@ -3,7 +3,7 @@ Here we describe the Kafka implementation.
 
 ## Start the cluster
 
-`docker-compose -f docker-compose-kafka.yml up -d`
+`docker-compose -f docker-compose-kafka-druid.yml up -d`
 
 ## Create topic
 Either create events topic through Kafdrop or start the API for events ingestion as `KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"`
@@ -23,7 +23,7 @@ Data incoming in is in json format. But usually Data Analyst would need to read 
 ## Configure S3-Sink Connector
 Note that you need to provide S3 credential in docker-compose-kafka.yml.
 
-    `curl -X POST -H 'Content-Type:application/json' --data @"./s3-parquet-connector.json" http://localhost:8083/connectors/`
+    `curl -X POST -H 'Content-Type:application/json' --data @"./s3-parquet-connector.json" http://localhost:8086/connectors/`
 
 There is a need to partition stream data for high throughput and low latency. We have several events and good to partition on that given that Data Analyst query are mostly based on events for such stream data.
  - Note that partition on event means that analytical pattern on events are assumed to be by event. Example, the total number of clicks on ListingView.

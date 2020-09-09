@@ -5,7 +5,7 @@ Moving events stream from mobile application to S3.
 ## *How would you build the data pipeline, while satisfying the high throughput, low latency requirement of the event ingestion API.*
 
 
-## Plan of attack (Overview, more can be found in the respective directory)
+## Plan of attack 
 
 1. Generate fake streaming data which post to API endpoint. 
     - Generate fake events data through Faker.

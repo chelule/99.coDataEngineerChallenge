@@ -1,5 +1,4 @@
 # Kafka
-Here we describe the Kafka implementation.
 
 ## Start the cluster
 

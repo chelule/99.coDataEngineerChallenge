@@ -8,7 +8,7 @@ To use the correct tools, it is required to understand the concept of a Data War
 - Query are typically very demanding, involves millions of records and aggregating
 - Disk bandwidth is often the bottleneck
 - Column base storage is suitable for such workload
-- Star schema/fact table. Contain lots of columns for flexibility in analytical. 
+- Star schema/fact table. Contain lots of columns for flexibility in analytic process. 
 
 # What the system wants to achieve
 - Perform analysis by Data Analyst/Business Intelligence
@@ -21,14 +21,14 @@ Here we compare 2 columnar database, Redshift and Druid.
 - Scalable
 - Low latency queries
 - Real time data ingestion
-- Partitioning, data are stored in segments, which are partitioned by time.
+- Partitioning, data are stored in segments, which are partitioned by time. Scaling cluster up/down do not introduce downtime.
 
 ### Redshift
 - Full SQL support
 - Scalable
 - Reasonably fast, but slower than Druid
 - Batch data ingestion
-- Partitioning, data are partition through hashing. Need to re-hash when scaling cluster up/down.
+- Partitioning, data are partition through hashing. Need to re-hash when scaling cluster up/down and introduce downtime.
 
 
 In this scenario, with only considering events data and performing near real-time analysis, Druid would be the better choice. 

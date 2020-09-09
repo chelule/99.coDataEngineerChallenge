@@ -1,4 +1,0 @@
-[09-09 13:21:49] p52404 {/Users/ongcj/Dev/99.co/event_ingestion/api/api_gateway.py:23} INFO - Logging is set up.
-[09-09 13:21:50] p52405 {/Users/ongcj/Dev/99.co/event_ingestion/api/api_gateway.py:23} INFO - Logging is set up.
-[09-09 13:22:06] p52405 {/Users/ongcj/Dev/99.co/event_ingestion/api/modules/events.py:36} DEBUG - Successfully posted event to kafka.
-[09-09 13:22:12] p52405 {/Users/ongcj/Dev/99.co/event_ingestion/api/modules/events.py:36} DEBUG - Successfully posted event to kafka.

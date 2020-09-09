@@ -1,3 +1,4 @@
 .idea
 *__pycache__*
 docker/kafka_druid/storage/*
+event_ingestion/api/log/*
